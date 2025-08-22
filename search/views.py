@@ -11,7 +11,6 @@ import os
 
 @login_required
 def index(request):
-    """صفحه اصلی"""
     upload_form = DocumentUploadForm()
     search_form = SearchForm()
     documents = Document.objects.filter(user=request.user).order_by('-uploaded_at')
@@ -26,7 +25,6 @@ def index(request):
 
 @login_required
 def upload_document(request):
-    """آپلود فایل جدید"""
     if request.method == 'POST':
         form = DocumentUploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -43,7 +41,6 @@ def upload_document(request):
 
 @login_required
 def search_document(request):
-    """جستجو در اسناد"""
     if request.method == 'POST':
         search_form = SearchForm(request.POST)
         if search_form.is_valid():
@@ -54,7 +51,6 @@ def search_document(request):
                 document = Document.objects.get(id=document_id, user=request.user)
                 file_path = document.file.path
 
-                # جستجو در فایل
                 results = search_in_document(file_path, search_term)
 
                 context = {
@@ -83,16 +79,13 @@ def search_document(request):
 
 @login_required
 def delete_document(request, document_id):
-    """حذف سند"""
     if request.method == 'POST':
         try:
             document = Document.objects.get(id=document_id)
 
-            # حذف فایل فیزیکی
             if os.path.exists(document.file.path):
                 os.remove(document.file.path)
 
-            # حذف رکورد از دیتابیس
             document.delete()
             messages.success(request, 'فایل با موفقیت حذف شد.')
 

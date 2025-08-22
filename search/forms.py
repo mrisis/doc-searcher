@@ -1,7 +1,6 @@
 from django import forms
 from .models import Document
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+
 
 
 class DocumentUploadForm(forms.ModelForm):
@@ -22,13 +21,11 @@ class DocumentUploadForm(forms.ModelForm):
     def clean_file(self):
         file = self.cleaned_data.get('file')
         if file:
-            # بررسی نوع فایل
             allowed_extensions = ['.pdf', '.docx', '.doc']
             file_extension = file.name.lower().split('.')[-1]
             if f'.{file_extension}' not in allowed_extensions:
                 raise forms.ValidationError("فقط فایل های PDF و Word پذیرفته می شود.")
 
-            # بررسی حجم فایل (10MB)
             if file.size > 10 * 1024 * 1024:
                 raise forms.ValidationError("حجم فایل نباید بیشتر از 10 مگابایت باشد.")
 

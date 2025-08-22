@@ -15,7 +15,6 @@ class CustomUserCreationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # تنظیم ویجت ها و کلاس های CSS
         self.fields['username'].widget.attrs.update({
             'class': 'form-control',
             'placeholder': 'نام کاربری'
